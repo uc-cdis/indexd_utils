@@ -17,10 +17,13 @@ def manifest_indexing(manifest, prefix=None):
         INDEXD["version"],
         (INDEXD["auth"]["username"], INDEXD["auth"]["password"]),
     )
+    try:
+        files = get_fileinfos_from_tsv_manifest(manifest)
+    except Exception as e:
+        logger.error("Can not read {}. Detail {}".format(manifest, e))
+        return
 
-    files = get_fileinfos_from_tsv_manifest(manifest)
     prefix = prefix or ""
-
     for fi in files:
         try:
             doc = indexclient.get(prefix + "/" + fi.get("id"))
@@ -71,4 +74,3 @@ if __name__ == '__main__':
     if args.action == "indexing":
         submit_test_data(args.host, args.project, args.dir, args.access_token_file, int(args.chunk_size))
         return
-    manifest_indexing
