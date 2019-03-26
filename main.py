@@ -7,6 +7,11 @@ from utils import get_fileinfos_from_tsv_manifest
 logger = get_logger(__name__)
 
 def manifest_indexing(manifest, prefix=None):
+    """
+    Loop through all the files in the manifest, update/create records in indexd
+    update indexd if the url is not in the record url list or acl has changed
+
+    """
     indexclient = IndexClient(
         INDEXD["host"],
         INDEXD["version"],
@@ -29,7 +34,7 @@ def manifest_indexing(manifest, prefix=None):
                 if fi.get("acl") in {"[u'open']", "['open']"}:
                     acl = ["*"]
                 else:
-                    acl = fi.get("acl")[1:-1].split(",")
+                    acl = [element.strip() for element in fi.get("acl")[1:-1].split(",")]
 
                 if doc.acl != acl:
                     doc.acl = acl
