@@ -1,4 +1,4 @@
-# indexd_utils
+# indexd utils
 
 Tools for indexing a list of objects in the provided manifest
 
@@ -11,7 +11,7 @@ pip install -r requirement.txt
 ### How to run
 
 ```
-python manin.py indexing --prefix dg.123 --manifest /path/to/the/manifest.tsv
+python main.py indexing --prefix dg.123 --manifest /path/to/the/manifest.tsv
 ```
 
 ### Manifest formats
