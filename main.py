@@ -23,10 +23,10 @@ def manifest_indexing(manifest, prefix=None):
         logger.error("Can not read {}. Detail {}".format(manifest, e))
         return
 
-    prefix = prefix or ""
+    prefix = prefix + "/" if prefix else ""
     for fi in files:
         try:
-            doc = indexclient.get(prefix + "/" + fi.get("id"))
+            doc = indexclient.get(prefixi + fi.get("GUID"))
             url = fi.get("url")
             if doc is not None:
                 need_update = False
@@ -47,7 +47,7 @@ def manifest_indexing(manifest, prefix=None):
                     doc.patch()
             else:
                 doc = indexclient.create(
-                        did=prefix + "/" + fi.get("id"),
+                        did=prefix + fi.get("GUID"),
                         hashes={"md5": fi.get("md5")},
                         size=fi.get("size", 0),
                         acl=acl,
@@ -56,7 +56,7 @@ def manifest_indexing(manifest, prefix=None):
 
         except Exception as e:
             # Don't break for any reason
-            logger.error("Can not update/create an indexd record with uuid {}. Detail {}".format(fi.get("id"))
+            logger.error("Can not update/create an indexd record with uuid {}. Detail {}".format(fi.get("GUID"))
 
 
 def parse_arguments():

@@ -1,2 +1,2 @@
 -e git+https://git@github.com/uc-cdis/cdislogging.git@0.0.2#egg=cdislogging
--e git+https://git@github.com/uc-cdis/indexclient.git@bdfa214f478186e9d91575a5f4877dc3b7a7d693#egg=indexclient
+-e git+https://git@github.com/uc-cdis/indexclient.git@1.5.9#egg=indexclient
