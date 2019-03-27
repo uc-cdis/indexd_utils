@@ -1,7 +1,7 @@
 import json
 
 INDEXD = {
-    "host": "http://localhost:8000",
+    "host": "https://giangb.planx-pla.net/index/index",
     "version": "v0",
-    "auth": {"username": "test", "password": "test"},
+    "auth": {"username": "gdcapi", "password": ""},
 }

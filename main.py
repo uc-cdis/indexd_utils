@@ -1,3 +1,5 @@
+import argparse
+
 from indexclient.client import IndexClient
 from cdislogging import get_logger
 
@@ -26,7 +28,7 @@ def manifest_indexing(manifest, prefix=None):
     prefix = prefix + "/" if prefix else ""
     for fi in files:
         try:
-            doc = indexclient.get(prefixi + fi.get("GUID"))
+            doc = indexclient.get(prefix + fi.get("GUID"))
             url = fi.get("url")
             if doc is not None:
                 need_update = False
@@ -39,7 +41,7 @@ def manifest_indexing(manifest, prefix=None):
                 else:
                     acl = [element.strip() for element in fi.get("acl")[1:-1].split(",")]
 
-                if doc.acl != acl:
+                if set(doc.acl) != set(acl):
                     doc.acl = acl
                     need_update = True
 
@@ -56,7 +58,7 @@ def manifest_indexing(manifest, prefix=None):
 
         except Exception as e:
             # Don't break for any reason
-            logger.error("Can not update/create an indexd record with uuid {}. Detail {}".format(fi.get("GUID"))
+            logger.error("Can not update/create an indexd record with uuid {}. Detail {}".format(fi.get("GUID")))
 
 
 def parse_arguments():
@@ -66,11 +68,12 @@ def parse_arguments():
     indexing_cmd = subparsers.add_parser("indexing")
     indexing_cmd.add_argument("--prefix", required=True, help="indexd prefix")
     indexing_cmd.add_argument("--manifest", required=True, help="The manifest path")
+    return parser.parse_args()
 
 
 if __name__ == '__main__':
     args = parse_arguments()
 
     if args.action == "indexing":
-        submit_test_data(args.host, args.project, args.dir, args.access_token_file, int(args.chunk_size))
-        return
+        manifest_indexing(args.manifest, prefix=args.prefix)
+
