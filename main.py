@@ -60,7 +60,7 @@ def manifest_indexing(manifest, prefix=None):
                     )
             number_indexed_files +=1
             if number_indexed_files % 10 == 0 or number_indexed_files == len(files):
-                logger.info("Progress {}".format(number_indexed_files*100.0/len(files)))
+                logger.info("Progress {}%".format(number_indexed_files*100.0/len(files)))
 
         except Exception as e:
             # Don't break for any reason
