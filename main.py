@@ -26,6 +26,7 @@ def manifest_indexing(manifest, prefix=None):
         return
 
     prefix = prefix + "/" if prefix else ""
+    number_indexed_files = 0
     for fi in files:
         try:
             url = fi.get("url")
@@ -33,7 +34,7 @@ def manifest_indexing(manifest, prefix=None):
             if fi.get("acl") in {"[u'open']", "['open']"}:
                 acl = ["*"]
             else:
-                acl = [element.strip() for element in fi.get("acl")[1:-1].split(",")]
+                acl = [element.strip().replace("'", "") for element in fi.get("acl")[1:-1].split(",")]
 
             doc = indexclient.get(prefix + fi.get("GUID"))
             if doc is not None:
@@ -57,6 +58,9 @@ def manifest_indexing(manifest, prefix=None):
                         acl=acl,
                         urls=[url],
                     )
+            number_indexed_files +=1
+            if number_indexed_files % 10 == 0 or number_indexed_files == len(files):
+                logger.info("Progress {}".format(number_indexed_files*100.0/len(files)))
 
         except Exception as e:
             # Don't break for any reason
