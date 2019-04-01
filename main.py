@@ -28,18 +28,20 @@ def manifest_indexing(manifest, prefix=None):
     prefix = prefix + "/" if prefix else ""
     for fi in files:
         try:
-            doc = indexclient.get(prefix + fi.get("GUID"))
             url = fi.get("url")
+
+            if fi.get("acl") in {"[u'open']", "['open']"}:
+                acl = ["*"]
+            else:
+                acl = [element.strip() for element in fi.get("acl")[1:-1].split(",")]
+
+            doc = indexclient.get(prefix + fi.get("GUID"))
             if doc is not None:
                 need_update = False
                 if url not in doc.urls:
                     doc.urls.append(url)
                     need_update = True
 
-                if fi.get("acl") in {"[u'open']", "['open']"}:
-                    acl = ["*"]
-                else:
-                    acl = [element.strip() for element in fi.get("acl")[1:-1].split(",")]
 
                 if set(doc.acl) != set(acl):
                     doc.acl = acl
