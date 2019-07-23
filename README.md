@@ -28,3 +28,4 @@ size: the object size in bytes
 acl: the object access control list.
 url: the location where the object live
 ```
+Some other optional columns: `crc, sha1, sha256, sha512`

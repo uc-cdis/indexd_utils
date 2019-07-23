@@ -51,9 +51,14 @@ def manifest_indexing(manifest, prefix=None):
                 if need_update:
                     doc.patch()
             else:
+                hashes = {}
+                for key in ["md5", "crc", "sha1", "sha256", "sha512"]:
+                    if key in fi:
+                        hashes[key] = fi[key]
+
                 doc = indexclient.create(
                         did=prefix + fi.get("GUID"),
-                        hashes={"md5": fi.get("md5")},
+                        hashes=hashes,
                         size=fi.get("size", 0),
                         acl=acl,
                         urls=[url],
