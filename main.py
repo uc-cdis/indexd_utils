@@ -31,7 +31,7 @@ def manifest_indexing(manifest, prefix=None):
         try:
             url = fi.get("url")
 
-            if fi.get("acl") in {"[u'open']", "['open']", "[u'Open']", "['Open']"}:
+            if fi.get("acl").lower() in {"[u'open']", "['open']"}:
                 acl = ["*"]
             else:
                 acl = [element.strip().replace("'", "") for element in fi.get("acl")[1:-1].split(",")]
