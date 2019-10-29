@@ -47,11 +47,14 @@ def manifest_indexing(manifest, prefix=None):
                     doc.urls = urls
                     need_update = True
 
-                # indexd doesn't like when records have metadata for non-existing
-                # urls
-                for url, metadata in doc.urls_metadata.items():
-                    if url not in urls:
-                        del doc.urls_metadata[url]
+                    # indexd doesn't like when records have metadata for non-existing
+                    # urls
+                    new_urls_metadata = copy.deepcopy(doc.urls_metadata)
+                    for url, metadata in doc.urls_metadata.items():
+                        if url not in urls:
+                            del new_urls_metadata[url]
+
+                    docs.urls_metadata = new_urls_metadata
 
                 if set(doc.acl) != set(acl):
                     doc.acl = acl
