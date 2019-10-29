@@ -51,7 +51,7 @@ def manifest_indexing(manifest, prefix=None):
                 # urls
                 for url, metadata in doc.urls_metadata.items():
                     if url not in urls:
-                        del doc.urls_metadata["url"]
+                        del doc.urls_metadata[url]
 
                 if set(doc.acl) != set(acl):
                     doc.acl = acl
