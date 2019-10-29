@@ -10,7 +10,7 @@ from utils import get_fileinfos_from_tsv_manifest
 logger = get_logger(__name__)
 
 
-def manifest_indexing(manifest, prefix=None):
+def manifest_indexing(manifest, prefix=None, replace_urls=False):
     """
     Loop through all the files in the manifest, update/create records in indexd
     update indexd if the url is not in the record url list or acl has changed
@@ -44,7 +44,11 @@ def manifest_indexing(manifest, prefix=None):
             doc = indexclient.get(prefix + fi.get("GUID"))
             if doc is not None:
                 need_update = False
-                if set(urls) != set(doc.urls):
+
+                if not replace_urls and url not in doc.urls:
+                    doc.urls.append(url)
+
+                if replace_urls and set(urls) != set(doc.urls):
                     doc.urls = urls
                     need_update = True
 
