@@ -45,8 +45,10 @@ def manifest_indexing(manifest, prefix=None, replace_urls=False):
             if doc is not None:
                 need_update = False
 
-                if not replace_urls and url not in doc.urls:
-                    doc.urls.append(url)
+                for url in urls:
+                    if not replace_urls and url not in doc.urls:
+                        doc.urls.append(url)
+                        need_update = True
 
                 if replace_urls and set(urls) != set(doc.urls):
                     doc.urls = urls
@@ -97,6 +99,9 @@ def parse_arguments():
     indexing_cmd = subparsers.add_parser("indexing")
     indexing_cmd.add_argument("--prefix", required=True, help="indexd prefix")
     indexing_cmd.add_argument("--manifest", required=True, help="The manifest path")
+    indexing_cmd.add_argument(
+        "--replace_urls", dest="replace_urls", action="store_true", default=False
+    )
     return parser.parse_args()
 
 
@@ -104,4 +109,6 @@ if __name__ == "__main__":
     args = parse_arguments()
 
     if args.action == "indexing":
-        manifest_indexing(args.manifest, prefix=args.prefix)
+        manifest_indexing(
+            args.manifest, prefix=args.prefix, replace_urls=args.replace_urls
+        )

@@ -10,8 +10,16 @@ pip install -r requirements.txt
 
 ### How to run
 
+To append new URLs to existing record:
+
 ```
 python main.py indexing --prefix dg.123 --manifest /path/to/the/manifest.tsv
+```
+
+To replace existing record urls with what's provided:
+
+```
+python main.py indexing --prefix dg.123 --replace_urls --manifest /path/to/the/manifest.tsv
 ```
 
 ### Manifest formats
