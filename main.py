@@ -1,4 +1,5 @@
 import argparse
+import copy
 
 from indexclient.client import IndexClient
 from cdislogging import get_logger
