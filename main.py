@@ -40,9 +40,19 @@ def manifest_indexing(manifest, prefix=None, replace_urls=False):
                     element.strip().replace("'", "")
                     for element in fi.get("acl")[1:-1].split(",")
                 ]
-
+            md5 = fi.get("md5")
             doc = indexclient.get(prefix + fi.get("GUID"))
             if doc is not None:
+                if doc.hashes["md5"] != md5:
+                    doc.delete()
+                    doc = indexclient.create(
+                        did=prefix + fi.get("GUID"),
+                        hashes={"md5": fi.get("md5")},
+                        size=fi.get("size", 0),
+                        acl=acl,
+                        urls=urls,
+                    )
+                    continue
                 need_update = False
 
                 for url in urls:
