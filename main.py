@@ -87,7 +87,7 @@ def manifest_indexing(manifest, prefix=None, replace_urls=False):
             # Don't break for any reason
             logger.error(
                 "Can not update/create an indexd record with uuid {}. Detail {}".format(
-                    fi.get("GUID")
+                    fi.get("GUID"), e
                 )
             )
 
