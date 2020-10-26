@@ -13,4 +13,3 @@ def get_fileinfos_from_tsv_manifest(manifest_file, dem="\t"):
             files.append(row)
 
     return files
-
